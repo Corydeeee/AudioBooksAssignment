@@ -1,6 +1,6 @@
 package com.example.audiobookscomapplication.model
 
 data class PodcastResponse (
-    var total: Int?,
-    var podcasts: List<Podcast>?
+    val total: Int?,
+    val podcasts: List<Podcast>?
 )
