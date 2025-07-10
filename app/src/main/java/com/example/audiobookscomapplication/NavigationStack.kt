@@ -23,53 +23,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.audiobookscomapplication.Screen
-import com.example.audiobookscomapplication.view.HomepageView
 import com.example.audiobookscomapplication.view.PodcastDetailsPageView
 import com.example.audiobookscomapplication.viewmodel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationStack() {
-    val navController = rememberNavController()
-    val homeViewModel = HomeViewModel()
 
-    NavHost(navController = navController, startDestination = Screen.Main.route) {
-        composable(route = Screen.Main.route) {
-            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                HomepageView(
-                    navController = navController,
-                    viewModel = homeViewModel,
-                    modifier = Modifier.padding(innerPadding)
-                )
-            }
-        }
-        composable(
-            route = Screen.Detail.route + "?id={id}",
-            arguments = listOf(
-                navArgument("id") {
-                    type = NavType.StringType
-                    nullable = true
-                }
-            )
-        ) {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        navigationIcon = {
-                            Row (Modifier.padding(start = 8.dp).clickable { navController.popBackStack() }){
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = "Localized description"
-                                )
-                                Text("Back", modifier = Modifier.padding(start = 4.dp))
-                            }
-                        },
-                        title = {},
-                    )
-                },
-            ) { innerPadding ->
-                PodcastDetailsPageView(id = it.arguments?.getString("id"), modifier = Modifier.padding(innerPadding))
-            }
-        }
-    }
 }
