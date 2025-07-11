@@ -1,12 +1,11 @@
-package com.example.audiobookscomapplication.model
+package com.example.audiobookscomapplication.data
 
 import PodcastDatabase
 import android.content.Context
 import android.util.Log
 import androidx.room.Room
-import com.example.audiobookscomapplication.services.RetrofitInstance
+import com.example.audiobookscomapplication.model.Podcast
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
@@ -23,22 +22,15 @@ object PodcastRepository {
             PodcastDatabase::class.java, "podcasts_table"
         ).build()
         fetchPodcastData()
-        fetchPodcastsFromDb()
+        updatePodcastsFromDb()
     }
-    private fun fetchPodcastsFromDb(){
+    private fun updatePodcastsFromDb(){
         _podcastFlow.value = db.podcastDao().getPodcasts()
-    }
-
-    fun getPodcast(id: String?): Podcast?{
-        id?.let {
-            return db.podcastDao().getPodcastFromId(id)
-        }
-        return null
     }
 
     suspend fun updateFavorite(podcast: Podcast) {
         db.podcastDao().updatePodcast(podcast)
-        fetchPodcastsFromDb()
+        updatePodcastsFromDb()
     }
 
     suspend fun fetchPodcastData() {

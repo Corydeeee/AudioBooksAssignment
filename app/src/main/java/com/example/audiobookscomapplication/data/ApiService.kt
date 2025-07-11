@@ -1,4 +1,4 @@
-package com.example.audiobookscomapplication.services
+package com.example.audiobookscomapplication.data
 
 import com.example.audiobookscomapplication.model.PodcastResponse
 import retrofit2.http.GET

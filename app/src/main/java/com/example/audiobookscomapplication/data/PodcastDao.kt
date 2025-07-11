@@ -1,7 +1,5 @@
 package com.practice.offlinecaching
 
-import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.audiobookscomapplication.model.Podcast
 

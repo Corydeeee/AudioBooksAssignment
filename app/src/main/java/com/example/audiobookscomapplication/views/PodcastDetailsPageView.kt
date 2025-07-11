@@ -1,7 +1,6 @@
-package com.example.audiobookscomapplication.view
+package com.example.audiobookscomapplication.views
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -25,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.audiobookscomapplication.model.Podcast
-import com.example.audiobookscomapplication.viewmodel.PodcastDetailsPageViewModel
+import com.example.audiobookscomapplication.viewmodels.PodcastDetailsPageViewModel
 
 @Composable
 fun PodcastDetailsPageView(modifier: Modifier, viewModel: PodcastDetailsPageViewModel) {

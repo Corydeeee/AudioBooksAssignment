@@ -1,4 +1,4 @@
-package com.example.audiobookscomapplication.view
+package com.example.audiobookscomapplication.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,7 +33,7 @@ import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.example.audiobookscomapplication.Screen
 import com.example.audiobookscomapplication.model.Podcast
-import com.example.audiobookscomapplication.viewmodel.HomePageViewModel
+import com.example.audiobookscomapplication.viewmodels.HomePageViewModel
 
 
 @Composable
