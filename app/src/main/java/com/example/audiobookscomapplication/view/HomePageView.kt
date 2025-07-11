@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -26,19 +29,16 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import com.example.audiobookscomapplication.model.Podcast
-import com.example.audiobookscomapplication.viewmodel.HomeViewModel
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.navigation.NavController
+import coil3.compose.AsyncImage
 import com.example.audiobookscomapplication.Screen
+import com.example.audiobookscomapplication.model.Podcast
+import com.example.audiobookscomapplication.viewmodel.HomePageViewModel
 
 
 @Composable
-fun HomepageView(modifier: Modifier, viewModel: HomeViewModel, navController: NavController) {
-    val funTest = fun(id: String) {
+fun HomepageView(modifier: Modifier, viewModel: HomePageViewModel, navController: NavController) {
+    val detailsRoute = fun(id: String) {
         navController.navigate(route = Screen.Detail.route + "?id=${id}")
     }
 
@@ -47,7 +47,7 @@ fun HomepageView(modifier: Modifier, viewModel: HomeViewModel, navController: Na
         podCastData = viewModel.shownData,
         isLoading = viewModel.isLoading,
         totalCount = viewModel.totalCount,
-        onNavClick = funTest,
+        onNavClick = detailsRoute,
         onNextPage = viewModel::nextPage,
     )
 }
@@ -119,7 +119,7 @@ fun PodcastRow(podcast: Podcast, onNavClick: (id: String) -> Unit) {
             .fillMaxWidth()
             .padding(vertical = 16.dp)
             .clickable {
-                podcast.id?.let { onNavClick(it) }
+                onNavClick(podcast.id)
             },
         verticalAlignment = Alignment.CenterVertically,
 
@@ -142,16 +142,21 @@ fun PodcastRow(podcast: Podcast, onNavClick: (id: String) -> Unit) {
             podcast.publisher?.let {
                 Text(text = it, color = Color.Gray, fontStyle = FontStyle.Italic)
             }
-            Column(Modifier.requiredSize(16.dp)) { }
+            Column(Modifier.requiredHeight(18.dp).fillMaxWidth()) {
+                if (podcast.favorite) {
+                    Text("Favourited", color = MaterialTheme.colorScheme.primary)
+                }
+            }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
 fun HomePagePreview() {
     HomePageViewInternal(
-        podCastData = listOf(Podcast.stub(), Podcast.stub(), Podcast.stub()),
+        podCastData = listOf(Podcast.stub(favorite = true), Podcast.stub(), Podcast.stub()),
         isLoading = false,
         totalCount = 20,
         onNavClick = {},

@@ -28,7 +28,10 @@ import com.example.audiobookscomapplication.model.PodcastRepository
 import com.example.audiobookscomapplication.ui.theme.AudioBookscomApplicationTheme
 import com.example.audiobookscomapplication.view.HomepageView
 import com.example.audiobookscomapplication.view.PodcastDetailsPageView
-import com.example.audiobookscomapplication.viewmodel.HomeViewModel
+import com.example.audiobookscomapplication.viewmodel.HomePageViewModel
+import com.example.audiobookscomapplication.viewmodel.PodcastDetailsPageViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -36,14 +39,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val podcastRepository = PodcastRepository(this@MainActivity)
-        lifecycleScope.launch{
-            podcastRepository.fetchPodcastData()
+        CoroutineScope(Dispatchers.IO).launch {
+            PodcastRepository.init(application)
         }
         setContent {
             AudioBookscomApplicationTheme {
                 val navController = rememberNavController()
-                val homeViewModel = ViewModelProvider(this)[HomeViewModel::class]
+                val homeViewModel = ViewModelProvider(this)[HomePageViewModel::class]
 
                 NavHost(navController = navController, startDestination = Screen.Main.route) {
                     composable(route = Screen.Main.route) {
@@ -68,7 +70,10 @@ class MainActivity : ComponentActivity() {
                             topBar = {
                                 TopAppBar(
                                     navigationIcon = {
-                                        Row (Modifier.padding(start = 8.dp).clickable { navController.popBackStack() }){
+                                        Row(
+                                            Modifier
+                                                .padding(start = 8.dp)
+                                                .clickable { navController.popBackStack() }) {
                                             Icon(
                                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                                 contentDescription = "Localized description"
@@ -80,7 +85,12 @@ class MainActivity : ComponentActivity() {
                                 )
                             },
                         ) { innerPadding ->
-                            PodcastDetailsPageView(id = it.arguments?.getString("id"), modifier = Modifier.padding(innerPadding))
+                            PodcastDetailsPageView(
+                                modifier = Modifier.padding(innerPadding),
+                                viewModel = PodcastDetailsPageViewModel(
+                                    id = it.arguments?.getString("id")
+                                )
+                            )
                         }
                     }
                 }
@@ -90,8 +100,8 @@ class MainActivity : ComponentActivity() {
 }
 
 sealed class Screen(val route: String) {
-    object Main: Screen("main_screen")
-    object Detail: Screen("detail_screen")
+    object Main : Screen("main_screen")
+    object Detail : Screen("detail_screen")
 }
 
 
